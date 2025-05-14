@@ -1,25 +1,27 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
-  const { login } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
   const [form, setForm] = useState({ username: '', password: '' });
   const [err, setErr] = useState('');
   const navigate = useNavigate(); 
 
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/', { replace: true });
+    }
+  }, [user, navigate]);
+
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log("Clicked");
-    
     try {
-      await login(form);          // calls AuthContext.login
-      console.log("login success");
-      navigate('/', { replace: true });    
+      await login(form);
+      navigate('/', { replace: true });
     } catch {
       setErr('Invalid credentials');
-      console.log(err);
-      
     }
   };
 

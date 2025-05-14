@@ -11,7 +11,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     api.get('/auth/me')                     // ① GET /me with cookie
       .then(({ data }) => {
-        setUser(data.user) 
+        setUser(data) 
         console.log("called me");
       }) 
       .catch(() => setUser(null))
